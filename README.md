@@ -1,3 +1,11 @@
+## Setup
+You need to set up NEXT_PUBLIC_API_URL env variable to your backend path e.g.
+
+```
+NEXT_PUBLIC_API_URL=https://localhost:7116
+```
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
