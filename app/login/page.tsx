@@ -1,42 +1,61 @@
 "use client";
+import { FormEvent, useState } from "react";
+import { LoginError } from "../LoginError";
+import { redirect, useRouter } from "next/navigation";
+import { RedirectType } from "next/dist/client/components/redirect";
 
-import { useState } from "react";
+interface LoginResponse {
+  status: LoginStatus;
+}
+
+enum LoginStatus {
+  Failed,
+  Success,
+  WrongPassword,
+  UserNotFound,
+}
 
 export default function Page() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+
+  const HandleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isFetching) {
+      return;
+    }
+
+    setIsFetching(true);
+
+    try {
+      var res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        method: "post",
+        credentials: "include",
+        body: JSON.stringify({ login: login, password: password }),
+        headers: { "Content-Type": "application/json" },
+      });
+      console.dir(res);
+      const body = (await res.json()) as LoginResponse;
+      console.dir(body);
+      if (body.status === LoginStatus.Success) {
+        router.push("/");
+      }
+    } catch (error) {
+      setErrorMessage("failed to login");
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (isFetching) {
-            return;
-          }
-
-          setIsFetching(true);
-          try {
-            var res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-              method: "post",
-              credentials: "include",
-              body: JSON.stringify({ login: login, password: password }),
-              headers: { "Content-Type": "application/json" },
-            });
-            console.dir(res);
-            console.dir(await res.json());
-          } catch (error) {
-            console.error("failed to login", error);
-          } finally {
-            setIsFetching(false);
-            console.log("done fetching");
-          }
-        }}
-        className="rounded border"
-      >
+      <form onSubmit={HandleSubmit} className="rounded border">
         <div className="mx-3 my-4">
-          <label>Login</label>
+          <label htmlFor="login">Login</label>
           <input
             id="login"
             type="text"
@@ -47,7 +66,7 @@ export default function Page() {
           ></input>
         </div>
         <div className="mx-3 mb-4">
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
@@ -64,6 +83,8 @@ export default function Page() {
             className="w-full rounded border px-3 py-2 hover:bg-blue-50"
           ></input>
         </div>
+
+        {errorMessage != "" && <LoginError message={errorMessage}></LoginError>}
       </form>
     </div>
   );
