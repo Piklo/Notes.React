@@ -20,6 +20,7 @@ export default function Page() {
           try {
             var res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
               method: "post",
+              credentials: "include",
               body: JSON.stringify({ login: login, password: password }),
               headers: { "Content-Type": "application/json" },
             });
