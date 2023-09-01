@@ -1,10 +1,10 @@
-export interface INote {
+export interface NoteProps {
   id: string;
   title: string;
   text: string;
 }
 
-export function Note({ id, title, text }: INote) {
+export function Note({ id, title, text }: NoteProps) {
   return (
     <div className="container rounded border border-red-600">
       <div className="flex flex-row bg-fuchsia-200">
