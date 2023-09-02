@@ -3,15 +3,18 @@ export interface NoteProps {
   value: string;
 }
 
-export function Note({ value: text }: NoteProps) {
+export function Note({ id, value: text }: NoteProps) {
   return (
     <div className="container rounded border border-red-600">
       <div className="p-1">{text}</div>
-      <div>
-        <button className="w-1/2 self-end  bg-blue-300 p-1 hover:bg-blue-400">
-          Edit
-        </button>
-        <button className="w-1/2 self-end  bg-red-300 p-1 hover:bg-red-400">
+      <div className="flex w-full">
+        <a
+          href={`edit/${id}`}
+          className="w-1/2 bg-blue-300 p-1 text-center hover:bg-blue-400"
+        >
+          <div>Edit</div>
+        </a>
+        <button className="w-1/2 bg-red-300 p-1 hover:bg-red-400">
           Delete
         </button>
       </div>
