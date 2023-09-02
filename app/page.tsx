@@ -4,6 +4,16 @@ import { useEffect, useState } from "react";
 import { NoteProps, Note } from "./Note";
 import { useRouter } from "next/navigation";
 
+interface GetNotesResponse {
+  status: GetNotesStatus;
+  notes: NoteProps[];
+}
+
+enum GetNotesStatus {
+  Failed,
+  Success,
+}
+
 export default function Page() {
   const [notes, setNotes] = useState([] as NoteProps[]);
   const router = useRouter();
@@ -14,7 +24,7 @@ export default function Page() {
         const asd = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/getNotes`, {
           credentials: "include",
         });
-        const json = await asd.json();
+        const json = (await asd.json()) as GetNotesResponse;
         console.dir(json);
         setNotes(json.notes);
       } catch (error) {
