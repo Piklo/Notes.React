@@ -1,9 +1,9 @@
-export interface NoteProps {
+export interface NoteDto {
   id: string;
   value: string;
 }
 
-export function Note({ id, value: text }: NoteProps) {
+export function Note({ id, value: text }: NoteDto) {
   return (
     <div className="container rounded border border-red-600">
       <div className="p-1">{text}</div>

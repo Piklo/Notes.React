@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { NoteProps, Note } from "./Note";
+import { NoteDto, Note } from "./Note";
 import { useRouter } from "next/navigation";
 
 interface GetNotesResponse {
   status: GetNotesStatus;
-  notes: NoteProps[];
+  notes: NoteDto[];
 }
 
 enum GetNotesStatus {
@@ -15,7 +15,7 @@ enum GetNotesStatus {
 }
 
 export default function Page() {
-  const [notes, setNotes] = useState([] as NoteProps[]);
+  const [notes, setNotes] = useState([] as NoteDto[]);
   const router = useRouter();
 
   useEffect(() => {
