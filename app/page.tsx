@@ -18,6 +18,14 @@ export default function Page() {
   const [notes, setNotes] = useState([] as NoteDto[]);
   const router = useRouter();
 
+  const removeNote = (id: string) => {
+    const newNotes = notes.filter((x) => {
+      return x.id !== id;
+    });
+
+    setNotes(newNotes);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,7 +33,6 @@ export default function Page() {
           credentials: "include",
         });
         const json = (await asd.json()) as GetNotesResponse;
-        console.dir(json);
         setNotes(json.notes);
       } catch (error) {
         router.push("/login");
@@ -36,7 +43,7 @@ export default function Page() {
   }, [router]);
 
   const items = notes.map((note) => (
-    <Note key={note.id} id={note.id} value={note.value}></Note>
+    <Note key={note.id} note={note} removeNote={removeNote}></Note>
   ));
   return <div className="grid grid-cols-3 gap-2 p-2">{items}</div>;
 }
