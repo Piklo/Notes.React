@@ -32,7 +32,7 @@ export default function Page() {
     setIsFetching(true);
 
     try {
-      var res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      var res = await fetch(`/api/login`, {
         method: "post",
         credentials: "include",
         body: JSON.stringify({ login: login, password: password }),

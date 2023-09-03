@@ -28,7 +28,7 @@ export default function Page() {
     setIsAdding(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/addNote`, {
+      const res = await fetch(`/api/addNote`, {
         method: "post",
         credentials: "include",
         headers: { "content-type": "application/json" },

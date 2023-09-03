@@ -29,7 +29,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const asd = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/getNotes`, {
+        const asd = await fetch(`/api/getNotes`, {
           credentials: "include",
         });
         const json = (await asd.json()) as GetNotesResponse;

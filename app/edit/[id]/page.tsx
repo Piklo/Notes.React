@@ -13,12 +13,9 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/getNote?id=${params.id}`,
-          {
-            credentials: "include",
-          },
-        );
+        const res = await fetch(`/api/getNote?id=${params.id}`, {
+          credentials: "include",
+        });
 
         var body = (await res.json()) as GetNoteResponse;
 
@@ -51,7 +48,7 @@ export default function Page({ params }: { params: { id: string } }) {
     setIsSaving(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/updateNote`, {
+      const res = await fetch(`/api/updateNote`, {
         method: "post",
         credentials: "include",
         body: JSON.stringify({ Id: params.id, Value: text }),

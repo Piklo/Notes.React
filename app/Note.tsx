@@ -32,7 +32,7 @@ export function Note({
     setIsDeleting(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/removeNote`, {
+      const res = await fetch(`/api/removeNote`, {
         method: "post",
         credentials: "include",
         headers: { "content-type": "application/json" },
