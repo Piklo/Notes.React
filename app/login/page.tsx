@@ -19,7 +19,7 @@ export default function Page() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const router = useRouter();
 
   const HandleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -30,19 +30,26 @@ export default function Page() {
     }
 
     setIsFetching(true);
+    setErrorMessage(undefined);
 
     try {
-      var res = await fetch(`/api/login`, {
+      const res = await fetch(`/api/login`, {
         method: "post",
         credentials: "include",
         body: JSON.stringify({ login: login, password: password }),
         headers: { "Content-Type": "application/json" },
       });
-      console.dir(res);
+
       const body = (await res.json()) as LoginResponse;
-      console.dir(body);
+
       if (body.status === LoginStatus.Success) {
         router.push("/");
+      } else if (body.status == LoginStatus.UserNotFound) {
+        setErrorMessage("user not found");
+      } else if (body.status == LoginStatus.WrongPassword) {
+        setErrorMessage("wrong password");
+      } else {
+        setErrorMessage("failed to login");
       }
     } catch (error) {
       setErrorMessage("failed to login");
@@ -52,8 +59,8 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <form onSubmit={HandleSubmit} className="rounded border">
+    <div className="flex items-center justify-center">
+      <form onSubmit={HandleSubmit} className="mt-72 rounded border">
         <div className="mx-3 my-4">
           <label htmlFor="login">Login</label>
           <input
@@ -84,7 +91,9 @@ export default function Page() {
           ></input>
         </div>
 
-        {errorMessage != "" && <LoginError message={errorMessage}></LoginError>}
+        {errorMessage !== undefined && (
+          <LoginError message={errorMessage}></LoginError>
+        )}
       </form>
     </div>
   );
