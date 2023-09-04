@@ -1,8 +1,7 @@
 "use client";
 import { FormEvent, useState } from "react";
 import { LoginError } from "./LoginError";
-import { redirect, useRouter } from "next/navigation";
-import { RedirectType } from "next/dist/client/components/redirect";
+import { useRouter } from "next/navigation";
 
 interface LoginResponse {
   status: LoginStatus;
