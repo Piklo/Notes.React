@@ -2,7 +2,6 @@ export default function Navbar() {
   return (
     <div className="flex">
       <NavbarButton link="/" value="Home"></NavbarButton>
-      <NavbarButton link="/login" value="Login"></NavbarButton>
       <NavbarButton link="/logout" value="Logout"></NavbarButton>
       <NavbarButton link="/newNote" value="Create new note"></NavbarButton>
     </div>
