@@ -59,41 +59,47 @@ export default function Page() {
 
   return (
     <div className="flex items-center justify-center">
-      <form onSubmit={HandleSubmit} className="mt-72 rounded border">
-        <div className="mx-3 my-4">
-          <label htmlFor="login">Login</label>
-          <input
-            id="login"
-            type="text"
-            placeholder="Login"
-            className="w-full rounded border px-3 py-2"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-          ></input>
-        </div>
-        <div className="mx-3 mb-4">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Password"
-            className="w-full rounded border px-3 py-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></input>
-        </div>
-        <div className="mx-3 mb-4">
-          <input
-            type="submit"
-            value="Login"
-            className="w-full rounded border px-3 py-2 hover:bg-blue-50"
-          ></input>
-        </div>
-
+      <div>
+        <form onSubmit={HandleSubmit} className="mt-72 rounded border">
+          <div className="mx-3 my-4">
+            <label htmlFor="login">Login</label>
+            <input
+              id="login"
+              type="text"
+              placeholder="Login"
+              className="w-full rounded border px-3 py-2"
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+            ></input>
+          </div>
+          <div className="mx-3 mb-4">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              className="w-full rounded border px-3 py-2"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+          </div>
+          <div className="mx-3 mb-4">
+            <input
+              type="submit"
+              value="Login"
+              className="w-full cursor-pointer rounded border px-3 py-2 hover:bg-blue-50"
+            ></input>
+          </div>
+          <a href="/register">
+            <div className="m-3 rounded border p-3 text-center hover:bg-blue-50">
+              new user?
+            </div>
+          </a>
+        </form>
         {errorMessage !== undefined && (
           <LoginError message={errorMessage}></LoginError>
         )}
-      </form>
+      </div>
     </div>
   );
 }
