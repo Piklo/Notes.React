@@ -35,7 +35,7 @@ export default function Page() {
         const json = (await asd.json()) as GetNotesResponse;
         setNotes(json.notes);
       } catch (error) {
-        router.push("/login");
+        console.error(error);
       }
     };
 
