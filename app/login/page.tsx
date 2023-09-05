@@ -74,41 +74,41 @@ export default function Page() {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <div>
-        <form onSubmit={HandleSubmit} className="mt-72 rounded border">
-          <div className="mx-3 my-4">
+    <div className="mt-72 flex justify-center">
+      <div className="w-72">
+        <form onSubmit={HandleSubmit} className="rounded border">
+          <div className="m-3">
             <label htmlFor="login">Login</label>
             <input
               id="login"
               type="text"
               placeholder="Login"
-              className="w-full rounded border px-3 py-2"
+              className="w-full rounded border p-2"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
             ></input>
           </div>
-          <div className="mx-3 mb-4">
+          <div className="m-3">
             <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               placeholder="Password"
-              className="w-full rounded border px-3 py-2"
+              className="w-full rounded border p-2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
-          <div className="mx-3 mb-4">
+          <div className="m-3">
             <input
               type="submit"
               value="Login"
-              className="w-full cursor-pointer rounded border px-3 py-2 hover:bg-blue-50"
+              className="w-full cursor-pointer rounded border p-2 hover:bg-blue-100"
             ></input>
           </div>
           <a href="/register">
-            <div className="m-3 rounded border p-3 text-center hover:bg-blue-50">
-              new user?
+            <div className="m-3 rounded border p-2 text-center hover:bg-blue-100">
+              Create new account
             </div>
           </a>
         </form>
