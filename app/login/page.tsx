@@ -56,6 +56,11 @@ export default function Page() {
           isSuccess: false,
           message: "Wrong password.",
         });
+      } else if (body.status == LoginStatus.Failed) {
+        setLoginResult({
+          isSuccess: false,
+          message: "Failed to login.",
+        });
       } else {
         setLoginResult({
           isSuccess: false,
