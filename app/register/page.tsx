@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import SuccessMessage from "../messages/SuccessMessage";
+import ErrorMessage from "../messages/ErrorMessage";
 
 interface RegisterResponse {
   status: RegisterStatus;
@@ -19,8 +21,8 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
-  const [registerErrorMessage, setRegisterErrorMessage] = useState<
-    string | null
+  const [registerResult, setRegisterResult] = useState<
+    { isSuccess: boolean; message: string } | undefined
   >();
   const router = useRouter();
 
@@ -32,31 +34,55 @@ export default function Page() {
     }
 
     setIsRegistering(true);
-    setRegisterErrorMessage(null);
+    setRegisterResult(undefined);
 
     try {
       const res = await fetch("api/register", {
         method: "post",
-        credentials: "include",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ login, email, password }),
       });
 
       const body = (await res.json()) as RegisterResponse;
 
-      if (body.status == RegisterStatus.Success) {
-        router.push("/login");
-      } else if (body.status == RegisterStatus.EmailInUse) {
-        setRegisterErrorMessage("Email is already in use");
-      } else if (body.status == RegisterStatus.LoginInUse) {
-        setRegisterErrorMessage("Login is already in use");
-      } else if (body.status == RegisterStatus.Failed) {
-        setRegisterErrorMessage("Failed to register");
-      } else {
-        setRegisterErrorMessage("Unknown register error");
+      switch (body.status) {
+        case RegisterStatus.Failed:
+          setRegisterResult({
+            isSuccess: false,
+            message: "Failed to register.",
+          });
+          break;
+        case RegisterStatus.Success:
+          setRegisterResult({
+            isSuccess: true,
+            message: "Successfully registered.",
+          });
+          router.push("/login");
+          break;
+        case RegisterStatus.EmailInUse:
+          setRegisterResult({
+            isSuccess: false,
+            message: "Email is already in use.",
+          });
+          break;
+        case RegisterStatus.LoginInUse:
+          setRegisterResult({
+            isSuccess: false,
+            message: "Login is already in use.",
+          });
+          break;
+        default:
+          const exhaustiveCheck: never = body.status;
+          setRegisterResult({
+            isSuccess: false,
+            message: "Failed to register, unknown status.",
+          });
       }
     } catch (error) {
-      setRegisterErrorMessage("Unknown register error");
+      setRegisterResult({
+        isSuccess: false,
+        message: "Failed to register, unknown error.",
+      });
     } finally {
       setIsRegistering(false);
     }
@@ -65,61 +91,60 @@ export default function Page() {
   return (
     <div className="mt-72 flex justify-center">
       <div className="w-72">
-        <form className="w-full rounded border p-3" onSubmit={HandleRegister}>
-          <div className="pb-1">
+        <form onSubmit={HandleRegister} className="rounded border">
+          <div className="m-3">
             <label htmlFor="login">Login</label>
-          </div>
-          <div>
             <input
               id="login"
               type="text"
+              placeholder="Login"
               className="w-full rounded border p-2"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
             ></input>
           </div>
-          <div className="py-2 pb-1">
+          <div className="m-3">
             <label htmlFor="email">Email</label>
-          </div>
-          <div>
             <input
               id="email"
               type="email"
+              placeholder="Email"
               className="w-full rounded border p-2"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></input>
           </div>
-          <div className="py-2 pb-1">
+          <div className="m-3">
             <label htmlFor="password">Password</label>
-          </div>
-          <div>
             <input
               id="password"
               type="password"
+              placeholder="Password"
               className="w-full rounded border p-2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
-          <div className="py-2 pb-1">
+          <div className="m-3">
             <input
               type="submit"
-              className="w-full cursor-pointer rounded border p-2 hover:bg-blue-50"
+              value="Register"
+              className="w-full cursor-pointer rounded border p-2 hover:bg-blue-100"
             ></input>
           </div>
+          <a href="/login">
+            <div className="m-3 rounded border p-2 text-center hover:bg-blue-100">
+              Already have an account
+            </div>
+          </a>
         </form>
-
-        {registerErrorMessage != null && (
-          <RegisterError message={registerErrorMessage}></RegisterError>
+        {registerResult?.isSuccess === true && (
+          <SuccessMessage message={registerResult.message}></SuccessMessage>
+        )}
+        {registerResult?.isSuccess === false && (
+          <ErrorMessage message={registerResult.message}></ErrorMessage>
         )}
       </div>
     </div>
   );
 }
-
-const RegisterError = ({ message }: { message: string }) => {
-  return (
-    <div className="my-2 w-full rounded border bg-red-300 p-2">{message}</div>
-  );
-};
