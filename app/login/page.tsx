@@ -43,29 +43,38 @@ export default function Page() {
 
       const body = (await res.json()) as LoginResponse;
 
-      if (body.status === LoginStatus.Success) {
-        setLoginResult({ isSuccess: true, message: "Successfully logged in." });
-        router.push("/");
-      } else if (body.status == LoginStatus.UserNotFound) {
-        setLoginResult({
-          isSuccess: false,
-          message: "User not found.",
-        });
-      } else if (body.status == LoginStatus.WrongPassword) {
-        setLoginResult({
-          isSuccess: false,
-          message: "Wrong password.",
-        });
-      } else if (body.status == LoginStatus.Failed) {
-        setLoginResult({
-          isSuccess: false,
-          message: "Failed to login.",
-        });
-      } else {
-        setLoginResult({
-          isSuccess: false,
-          message: "Failed to login, unknown status.",
-        });
+      switch (body.status) {
+        case LoginStatus.Failed:
+          setLoginResult({
+            isSuccess: false,
+            message: "Failed to login.",
+          });
+          break;
+        case LoginStatus.Success:
+          setLoginResult({
+            isSuccess: true,
+            message: "Successfully logged in.",
+          });
+          router.push("/");
+          break;
+        case LoginStatus.WrongPassword:
+          setLoginResult({
+            isSuccess: false,
+            message: "Wrong password.",
+          });
+          break;
+        case LoginStatus.UserNotFound:
+          setLoginResult({
+            isSuccess: false,
+            message: "User not found.",
+          });
+          break;
+        default:
+          const exhaustiveCheck: never = body.status;
+          setLoginResult({
+            isSuccess: false,
+            message: "Failed to login, unknown status.",
+          });
       }
     } catch (error) {
       console.error(error);
