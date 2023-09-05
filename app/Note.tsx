@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ErrorMessage from "./messages/ErrorMessage";
 
 export interface NoteDto {
   id: string;
@@ -23,31 +24,52 @@ export function Note({
   removeNote: (id: string) => void;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteResult, setDeleteResult] = useState<
+    { isSuccess: boolean; message: string } | undefined
+  >();
+
   const handleDelete = async () => {
     if (isDeleting) {
       return;
     }
 
-    console.log(note.id);
     setIsDeleting(true);
 
     try {
       const res = await fetch(`/api/removeNote`, {
         method: "post",
-        credentials: "include",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ Id: note.id }),
       });
 
-      var body = (await res.json()) as RemoveNoteResponse;
+      const body = (await res.json()) as RemoveNoteResponse;
 
-      console.dir(body);
-
-      if (body.status != RemoveNoteStatus.Success) {
-        return;
+      switch (body.status) {
+        case RemoveNoteStatus.Failed:
+          setDeleteResult({
+            isSuccess: false,
+            message: "Failed to delete the note.",
+          });
+          break;
+        case RemoveNoteStatus.Success:
+          setDeleteResult({
+            isSuccess: true,
+            message: "Successully deleted the note.",
+          });
+          break;
+        case RemoveNoteStatus.ZeroAffected:
+          setDeleteResult({
+            isSuccess: false,
+            message: "Failed to find the note.",
+          });
+          break;
+        default:
+          const exhaustiveCheck: never = body.status;
       }
 
-      removeNote(note.id);
+      if (body.status === RemoveNoteStatus.Success) {
+        removeNote(note.id);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -72,6 +94,9 @@ export function Note({
           Delete
         </button>
       </div>
+      {deleteResult?.isSuccess === false && (
+        <ErrorMessage message={deleteResult.message}></ErrorMessage>
+      )}
     </div>
   );
 }
