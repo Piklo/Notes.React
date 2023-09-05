@@ -79,9 +79,12 @@ export function Note({
 
   return (
     <div className="container h-fit rounded border border-red-600">
-      <div className="line-clamp-5 whitespace-pre-wrap break-words p-1">
+      <textarea
+        className="disabled h-36 w-full whitespace-pre-wrap break-words p-1"
+        disabled
+      >
         {note.value}
-      </div>
+      </textarea>
       <div className="flex w-full">
         <a
           href={`edit/${note.id}`}
