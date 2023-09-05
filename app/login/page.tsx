@@ -1,7 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { LoginError } from "./LoginError";
 import { useRouter } from "next/navigation";
+import ErrorMessage from "../messages/ErrorMessage";
+import SuccessMessage from "../messages/SuccessMessage";
 
 interface LoginResponse {
   status: LoginStatus;
@@ -18,7 +19,9 @@ export default function Page() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [loginResult, setLoginResult] = useState<
+    { message: string; isSuccess: boolean } | undefined
+  >();
   const router = useRouter();
 
   const HandleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -29,12 +32,11 @@ export default function Page() {
     }
 
     setIsFetching(true);
-    setErrorMessage(undefined);
+    setLoginResult(undefined);
 
     try {
       const res = await fetch(`/api/login`, {
         method: "post",
-        credentials: "include",
         body: JSON.stringify({ login: login, password: password }),
         headers: { "Content-Type": "application/json" },
       });
@@ -42,16 +44,30 @@ export default function Page() {
       const body = (await res.json()) as LoginResponse;
 
       if (body.status === LoginStatus.Success) {
+        setLoginResult({ isSuccess: true, message: "Successfully logged in." });
         router.push("/");
       } else if (body.status == LoginStatus.UserNotFound) {
-        setErrorMessage("user not found");
+        setLoginResult({
+          isSuccess: false,
+          message: "User not found.",
+        });
       } else if (body.status == LoginStatus.WrongPassword) {
-        setErrorMessage("wrong password");
+        setLoginResult({
+          isSuccess: false,
+          message: "Wrong password.",
+        });
       } else {
-        setErrorMessage("failed to login");
+        setLoginResult({
+          isSuccess: false,
+          message: "Failed to login, unknown status.",
+        });
       }
     } catch (error) {
-      setErrorMessage("failed to login");
+      console.error(error);
+      setLoginResult({
+        isSuccess: false,
+        message: "Failed to login, unknown error.",
+      });
     } finally {
       setIsFetching(false);
     }
@@ -96,8 +112,11 @@ export default function Page() {
             </div>
           </a>
         </form>
-        {errorMessage !== undefined && (
-          <LoginError message={errorMessage}></LoginError>
+        {loginResult?.isSuccess === true && (
+          <SuccessMessage message={loginResult.message}></SuccessMessage>
+        )}
+        {loginResult?.isSuccess === false && (
+          <ErrorMessage message={loginResult.message}></ErrorMessage>
         )}
       </div>
     </div>
