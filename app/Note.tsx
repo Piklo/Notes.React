@@ -56,8 +56,8 @@ export function Note({
   };
 
   return (
-    <div className="container rounded border border-red-600">
-      <div className="p-1">{note.value}</div>
+    <div className="container h-fit rounded border border-red-600">
+      <div className="line-clamp-5 break-words p-1">{note.value}</div>
       <div className="flex w-full">
         <a
           href={`edit/${note.id}`}
