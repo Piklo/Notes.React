@@ -57,6 +57,7 @@ export default function Page() {
           className="h-96 w-full rounded border border-black"
           value={text}
           onChange={(x) => setText(x.target.value)}
+          required
         ></textarea>
         <button
           className="w-full  rounded border bg-gray-100 hover:bg-gray-200"

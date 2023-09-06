@@ -17,7 +17,7 @@ export default function Page({ params }: { params: { id: string } }) {
           credentials: "include",
         });
 
-        var body = (await res.json()) as GetNoteResponse;
+        const body = (await res.json()) as GetNoteResponse;
 
         if (body.note === undefined) {
           if (body.status == GetNoteStatus.Failed) {
@@ -55,7 +55,7 @@ export default function Page({ params }: { params: { id: string } }) {
         headers: { "Content-Type": "application/json" },
       });
 
-      var body = (await res.json()) as UpdateNoteResponse;
+      const body = (await res.json()) as UpdateNoteResponse;
 
       if (body.status != UpdateNoteStatus.Success) {
         console.error("failed to update the node");
@@ -79,6 +79,7 @@ export default function Page({ params }: { params: { id: string } }) {
             className="h-96 w-full rounded border"
             value={text}
             onChange={(x) => setText(x.target.value)}
+            required
           ></textarea>
         </div>
         <button

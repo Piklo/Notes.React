@@ -101,6 +101,7 @@ export default function Page() {
               className="w-full rounded border p-2"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
+              required
             ></input>
           </div>
           <div className="m-3">
@@ -112,6 +113,7 @@ export default function Page() {
               className="w-full rounded border p-2"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             ></input>
           </div>
           <div className="m-3">
@@ -123,6 +125,7 @@ export default function Page() {
               className="w-full rounded border p-2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             ></input>
           </div>
           <div className="m-3">
