@@ -82,9 +82,8 @@ export function Note({
       <textarea
         className="disabled h-36 w-full whitespace-pre-wrap break-words p-1"
         disabled
-      >
-        {note.value}
-      </textarea>
+        value={note.value}
+      ></textarea>
       <div className="flex w-full">
         <a
           href={`edit/${note.id}`}
