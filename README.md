@@ -3,8 +3,11 @@ You need to set up API_URL env variable to your backend url e.g.
 
 ```
 # .env.local
-API_URL=https://localhost:7116
+API_URL=http://localhost:5130
 ```
+
+For development purposes you should use http because next doesn't like self signed certificates (DEPTH_ZERO_SELF_SIGNED_CERT)
+
 ---
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
