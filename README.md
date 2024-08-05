@@ -1,8 +1,9 @@
 ## Setup
-You need to set up NEXT_PUBLIC_API_URL env variable to your backend path e.g.
+You need to set up API_URL env variable to your backend url e.g.
 
 ```
-NEXT_PUBLIC_API_URL=https://localhost:7116
+# .env.local
+API_URL=https://localhost:7116
 ```
 ---
 
