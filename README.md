@@ -1,4 +1,8 @@
+A simple project to test next.js, react and tailwind.
+
 ## Setup
+One of the backends is required [Notes.Net](https://github.com/Piklo/Notes.Net) or [Notes.Go](https://github.com/Piklo/Notes.Go).
+
 You need to set up API_URL env variable to your backend url e.g.
 
 ```
